@@ -11,6 +11,9 @@ Add this in your HTML: `<div class="quicknav js-quicknav"></div>` (the `quicknav
 
 Add the `js-quicknav-section` class on each section that you want in the quicknav.
 
+### CSS
+Ajouter les classes du fichier `style.css`. Ces styles donnent une base pour l'affichage.
+
 
 ## Required
 * jQuery (tested on jQuery v3.1.1)
