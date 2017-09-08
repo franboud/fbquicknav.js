@@ -1,6 +1,6 @@
 /**
  * Quick Nav jQuery plugin.
- * Version 1.0
+ * Version 1.1
  *
  * Required:
  *    - jQuery (tested on jQuery v3.1.1)
@@ -218,11 +218,15 @@
         // When the window reach a section, hide the quicknav.
         // Usually, this section is the footer.
         function toggle_hide_quicknav($quicknav) {
+            var $hide_on_this_section = $(settings.section_class_hide);
+            if ($hide_on_this_section.length === 0) { return; }
+
+
             var controller = new ScrollMagic.Controller();
 
             // CLASS TOGGLE on quick nav when the section is centered in the viewport.
             var scene = new ScrollMagic
-                .Scene({ triggerElement: settings.section_class_hide, triggerHook: 0.7 })
+                .Scene({ triggerElement: $hide_on_this_section[0], triggerHook: 0.7 })
                 .setClassToggle($quicknav[0], "quicknav--hide") // add class toggle
                 // .addIndicators() // add indicators (requires plugin)
                 .addTo(controller);
