@@ -3,7 +3,11 @@ This plugin is to automatically create a quick nav to navigate in different sect
 
 
 ## Usage
+### JS init
 `$(".js-quicknav").fbquicknav();`
+
+### HTML
+Add this in your HTML: `<div class="quicknav js-quicknav"></div>` (the `quicknav` class is for CSS styling, and the `js-quicknav` is to bind it to the JS).
 
 Add the `js-quicknav-section` class on each section that you want in the quicknav.
 
