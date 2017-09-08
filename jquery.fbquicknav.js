@@ -1,6 +1,6 @@
 /**
  * Quick Nav jQuery plugin.
- * Version 1.1
+ * Version 1.0
  *
  * Required:
  *    - jQuery (tested on jQuery v3.1.1)
