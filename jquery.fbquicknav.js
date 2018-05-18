@@ -220,7 +220,7 @@
                             duration: section_heights[section_index]
                         })
                         .setClassToggle(link, "active") // add class toggle
-                        .addIndicators() // add indicators (requires plugin)
+                        // .addIndicators() // add indicators (requires plugin)
                         .addTo(controller);
 
                 } else {
@@ -245,7 +245,7 @@
                                 $linkPrev.addClass('active');
                             }
                         })
-                        .addIndicators() // add indicators (requires plugin)
+                        // .addIndicators() // add indicators (requires plugin)
                         .addTo(controller);
                 }
 
