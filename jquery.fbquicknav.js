@@ -1,6 +1,6 @@
 /**
  * Quick Nav jQuery plugin.
- * Version 1.2
+ * Version 1.3
  *
  * Required:
  *    - jQuery (tested on jQuery v3.1.1)
@@ -17,11 +17,13 @@
  *    - scroll_offset --> -100 (px) --> Offset of the scroll when we click on a quick nav link.
  *    - scroll_duration --> 500 (ms) --> Duration of the scroll.
  *    - add_trigger --> false | true --> Add a button to open and close the quicknav.
+ *    - calculate_heights --> false | true --> Calculate each of the section heights, makes the 'active' classes match exactly the height of each section.
  */
 
 (function ($) {
 
     $.fn.fbquicknav = function (options) {
+
 
         // Default options.
         var settings = $.extend({
@@ -30,8 +32,10 @@
             section_title: "data-quicknav-title",
             scroll_offset: -100,
             scroll_duration: 500,
-            add_trigger: false
+            add_trigger: false,
+            calculate_heights: false
         }, options);
+
 
         // Global vars
         var section_heights = [];
@@ -56,10 +60,12 @@
 
             // ON RESIZE, the sections changes height.
             // This code set the sections to the new height.
-            $(window).on("resize", function () {
-                set_section_heights($sections);
-                resize_scroll_magic_scenes($sections);
-            });
+            if (settings.calculate_heights == true) {
+                $(window).on("resize", function () {
+                    set_section_heights($sections);
+                    resize_scroll_magic_scenes($sections);
+                });
+            }
         });
 
 
@@ -76,14 +82,15 @@
                     title = $this_section.attr(settings.section_title);
 
                 // Element that will be added to the page.
-                var $item = $("<a>", {
-                    "href": "#",
-                    "class": "quicknav__item",
-                    "html": $("<span>", {
-                        "class": "quicknav__text",
-                        "text": title
-                    })
-                });
+                var $item = $(
+                    '<a>', {
+                        'href': '#',
+                        'class': 'quicknav__item',
+                        'html': $(
+                            '<span class="quicknav__text">' + title + '</span>'
+                        )
+                    }
+                );
 
                 // Links item to section.
                 $item.attr("data-quicknav-index", index);
@@ -99,8 +106,8 @@
             if (settings.add_trigger === true) {
                 var trigger = ' ' +
                     '<button type="button" class="btn-icon quicknav__trigger jsQuicknav__trigger">' +
-                        '<svg class="icon quicknav__triggeropen"><use xlink:href="#icon-main-menu" /></svg>' +
-                        '<svg class="icon quicknav__triggerclose"><use xlink:href="#icon-close" /></svg>' +
+                    '<svg class="icon quicknav__triggeropen"><use xlink:href="#icon-main-menu" /></svg>' +
+                    '<svg class="icon quicknav__triggerclose"><use xlink:href="#icon-close" /></svg>' +
                     '</button>';
 
                 $quicknav.append(trigger);
@@ -192,7 +199,9 @@
 
         // CLASSES TOGGLE on the quicknav.
         function toggle_quicknav_classes($quicknav, $sections) {
-            var controller = new ScrollMagic.Controller();
+            var
+                controller = new ScrollMagic.Controller(),
+                $linksAll = $('a', $quicknav);
 
             $sections.each(function (index, section) {
                 var
@@ -201,12 +210,46 @@
                     $link = $("a[data-quicknav-index='" + section_index + "']", $quicknav),
                     link = $link[0];
 
+
                 // CLASS TOGGLE when the section is centered in the viewport.
-                var scene = new ScrollMagic
-                    .Scene({ triggerElement: section, triggerHook: 0.5, duration: section_heights[section_index] })
-                    .setClassToggle(link, "active") // add class toggle
-                    // .addIndicators() // add indicators (requires plugin)
-                    .addTo(controller);
+                if (settings.calculate_heights == true) {
+                    var scene = new ScrollMagic
+                        .Scene({
+                            triggerElement: section,
+                            triggerHook: 0.5,
+                            duration: section_heights[section_index]
+                        })
+                        .setClassToggle(link, "active") // add class toggle
+                        .addIndicators() // add indicators (requires plugin)
+                        .addTo(controller);
+
+                } else {
+                    var scene = new ScrollMagic.Scene();
+                    scene
+                        .triggerElement(section)
+                        .triggerHook(0.5)
+                        .on('start', function (evt) {
+
+                            if (evt.scrollDirection == "FORWARD") {
+                                $linksAll.removeClass('active');
+                                $link.addClass('active');
+
+                            } else {
+                                $linksAll.removeClass('active');
+
+                                // Get le link de la section precedente
+                                var
+                                    section_index_prev = section_index - 1,
+                                    $linkPrev = $("a[data-quicknav-index='" + section_index_prev + "']", $quicknav);
+
+                                $linkPrev.addClass('active');
+                            }
+                        })
+                        .addIndicators() // add indicators (requires plugin)
+                        .addTo(controller);
+                }
+
+
 
                 // Push the scene to the array of scene objects
                 scroll_magic_scenes[section_index] = scene;
@@ -238,6 +281,8 @@
         // Set toutes les hauteurs de section.
         // Au init, ou au screen resize.
         function set_section_heights($sections) {
+            if (settings.calculate_heights !== true) { return; }
+
             $sections.each(function (index, section) {
                 var height = $(section).outerHeight(true);
                 section_heights[index] = height;

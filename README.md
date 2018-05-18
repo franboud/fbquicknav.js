@@ -52,3 +52,6 @@ Default: `500`. Duration of the scroll, in ms.
 ### add_trigger
 Default: `false`. Add a button to open and close the quicknav.
 
+### calculate_heights
+Default: `false`. Calculate each of the section heights, makes the 'active' classes match exactly the height of each section.
+
