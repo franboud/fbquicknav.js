@@ -1,6 +1,6 @@
 /**
  * Quick Nav jQuery plugin.
- * Version 1.3.1
+ * Version 1.3.2
  *
  * Required:
  *    - jQuery (tested on jQuery v3.1.1)
@@ -66,6 +66,9 @@
                     resize_scroll_magic_scenes($sections);
                 });
             }
+
+            // Tout est fait, init quicknav
+            $quicknav.addClass('isInit');
         });
 
 
