@@ -1,6 +1,6 @@
 /**
  * Quick Nav jQuery plugin.
- * Version 1.3.3.1
+ * Version 1.4
  *
  * Required:
  *    - jQuery (tested on jQuery v3.1.1)
@@ -103,6 +103,23 @@
                 $items.append($item);
             });
 
+
+            /**
+             * Title of the quicknav
+             */
+            var quicknavTitle = $quicknav.attr('data-quicknav-main-title');
+
+            if (typeof quicknavTitle !== 'undefined') {
+                var $divCarrieres = $(
+                    "<div>", {
+                        "class": "quicknav__carrieres",
+                        "html": quicknavTitle
+                    });
+
+                $quicknav.append($divCarrieres);
+            }
+
+
             $quicknav.append($items);
 
 
@@ -193,11 +210,38 @@
                     section_index = $this.attr("data-quicknav-index"),
                     $section = $sections.filter("[data-quicknav-index='" + section_index + "']");
 
-                $.scrollTo($section, {
-                    offset: settings.scroll_offset,
-                    duration: settings.scroll_duration
-                });
+                go_to_section($section);
             });
+        }
+
+
+        // GO TO SECTION
+        // Centralise le code qui permet de scroller vers une section.
+        function go_to_section($section) {
+            $.scrollTo($section, {
+                offset: settings.scroll_offset,
+                duration: settings.scroll_duration
+            });
+        }
+
+
+        // GO TO NEXT SECTION
+        // Scroll automatiquement vers la prochaine section.
+        // Utile quand on a un bouton de prochaine section.
+        function go_to_next_section($quicknav, $sections) {
+            var
+                section_active_index = $('a.active', $quicknav).attr("data-quicknav-index"),
+                next_section_index = 0;
+
+            if (typeof section_active_index === 'undefined') {
+                next_section_index = 0;
+            } else {
+                next_section_index = parseInt(section_active_index) + 1;
+            }
+
+            var $section = $sections.filter("[data-quicknav-index='" + next_section_index + "']");
+
+            go_to_section($section);
         }
 
 
@@ -211,8 +255,25 @@
                 var
                     $section = $(section),
                     section_index = $section.attr("data-quicknav-index"),
-                    $link = $("a[data-quicknav-index='" + section_index + "']", $quicknav),
-                    link = $link[0];
+                    onDark = $section.attr("data-quicknav-on-dark"),
+                    showTitle = $section.attr("data-quicknav-main-title-show"),
+                    $link = $("a[data-quicknav-index='" + section_index + "']", $quicknav);
+
+
+                // DARK BG section or not?
+                if (typeof onDark === "undefined") {
+                    onDark = false;
+                } else {
+                    onDark = true;
+                }
+
+
+                // SHOW TITLE of quicknav in this section or not?
+                if (typeof showTitle === "undefined") {
+                    showTitle = false;
+                } else {
+                    showTitle = true;
+                }
 
 
                 // CLASS TOGGLE when the section is centered in the viewport.
@@ -223,7 +284,17 @@
                             triggerHook: 0.5,
                             duration: section_heights[section_index]
                         })
-                        .setClassToggle(link, "active") // add class toggle
+                        .on('enter leave', function () {
+                            $link.toggleClass('active');
+
+                            if (onDark) {
+                                $quicknav.toggleClass('onDarkSection');
+                            }
+
+                            if (showTitle) {
+                                $quicknav.toggleClass('showTitleSection');
+                            }
+                        })
                         // .addIndicators() // add indicators (requires plugin)
                         .addTo(controller);
 
