@@ -6,6 +6,7 @@
  *    - jQuery (tested on jQuery v3.1.1)
  *    - ScrollTo (tested on 2.1.2)
  *    - ScrollMagic (tested on v2.0.5)
+ *    - LoDash _.debounce function
  *
  * Pour activer :
  *    $(".jsQuicknav").fbquicknav();
@@ -61,10 +62,10 @@
             // ON RESIZE, the sections changes height.
             // This code set the sections to the new height.
             if (settings.calculate_heights == true) {
-                $(window).on("resize", function () {
+                window.addEventListener('resize', _.debounce(function () {
                     set_section_heights($sections);
                     resize_scroll_magic_scenes($sections);
-                });
+                }, 300));
             }
 
             // Tout est fait, init quicknav
