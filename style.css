@@ -1,12 +1,15 @@
 /*  QUICKNAV
     Quick nav sticky at right of some pages. */
-    .quicknav {display: none;background: red;position: fixed;top: 0;right: 0;box-sizing: border-box;width: 100vh;height: 6vw;z-index: 5;transform: rotate(-90deg) translateY(-100%);transform-origin: 100% 0%;}
+    .quicknav {display: block;background: red;position: fixed;top: 0;right: 0;box-sizing: border-box;width: 100vh;height: 6vw;z-index: 5;transform: rotate(-90deg) translateY(-100%);transform-origin: 100% 0%; opacity: 0;transition: opacity 0.5s;}
     .quicknav__items {display: flex;height: 100%;align-items: center;}
     .quicknav__item {display: block;color: #000;text-decoration: none;text-transform: uppercase;flex: 1 1 auto;white-space: nowrap;text-align: center;padding: 1vw 0;}
     .quicknav__text { }
 
+        /* Init */
+        .quicknav.isInit {opacity: 1;}
+
         /* Hover */
-        .quicknav__item:hover, .quicknav__item:focus, .quicknav__item:active {color: blue;}
+        .quicknav__item:hover {color: blue;}
 
         /* Active */
         .quicknav__item.active {color: blue;}
@@ -15,7 +18,7 @@
         .quicknav--hide {opacity: 0;}
 
 
-    /* Media queries */
-    @media (min-width: 992px) {
-        .quicknav {display: block;}
+    /* Hidden on small screens */
+    @media (max-width:991px) {
+        .quicknav {display: none;}
     }
