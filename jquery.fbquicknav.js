@@ -1,6 +1,6 @@
 /**
  * Quick Nav jQuery plugin.
- * Version 1.4
+ * Version 1.5
  *
  * Required:
  *    - jQuery (tested on jQuery v3.1.1)
@@ -34,7 +34,7 @@
             scroll_offset: -100,
             scroll_duration: 500,
             add_trigger: false,
-            calculate_heights: false
+            calculate_heights: true
         }, options);
 
 
@@ -82,7 +82,7 @@
 
             $sections.each(function (index, element) {
                 var
-                    $this_section = $(this),
+                    $this_section = $(element),
                     title = $this_section.attr(settings.section_title);
 
                 // Element that will be added to the page.
@@ -99,6 +99,9 @@
                 // Links item to section.
                 $item.attr("data-quicknav-index", index);
                 $this_section.attr("data-quicknav-index", index);
+
+                // Add title to $section data
+                $this_section.data('titre', title);
 
                 $items.append($item);
             });
@@ -126,9 +129,10 @@
             // Trigger to open / close quicknav
             if (settings.add_trigger === true) {
                 var trigger = ' ' +
-                    '<button type="button" class="btn-icon quicknav__trigger jsQuicknav__trigger">' +
-                    '<svg class="icon quicknav__triggeropen"><use xlink:href="#icon-main-menu" /></svg>' +
-                    '<svg class="icon quicknav__triggerclose"><use xlink:href="#icon-close" /></svg>' +
+                    '<button type="button" class="quicknav__trigger jsQuicknav__trigger">' +
+                    '<span class="quicknav__triggerLabel jsQuicknav__triggerLabel"></span>' +
+                    '<svg class="icon quicknav__triggerIcon quicknav__triggerOpen"><use xlink:href="#icon-arrow-down" /></svg>' +
+                    '<svg class="icon quicknav__triggerIcon quicknav__triggerClose"><use xlink:href="#icon-close" /></svg>' +
                     '</button>';
 
                 $quicknav.append(trigger);
@@ -225,6 +229,19 @@
         }
 
 
+        // UPDATE TRIGGER LABEL
+        // Mettre le nom de la section active dans le trigger button.
+        function set_trigger_label($quicknav, $section) {
+            if (settings.add_trigger !== true) { return; }
+
+            var
+                $triggerLabel = $(".jsQuicknav__triggerLabel", $quicknav),
+                sectionName = $section.data('titre');
+
+            $triggerLabel.html(sectionName);
+        }
+
+
         // GO TO NEXT SECTION
         // Scroll automatiquement vers la prochaine section.
         // Utile quand on a un bouton de prochaine section.
@@ -284,15 +301,30 @@
                             triggerHook: 0.5,
                             duration: section_heights[section_index]
                         })
-                        .on('enter leave', function () {
-                            $link.toggleClass('active');
+                        .on('enter', function () {
+                            $section.data('active', 1);
+                            $link.addClass('active');
 
                             if (onDark) {
-                                $quicknav.toggleClass('onDarkSection');
+                                $quicknav.addClass('onDarkSection');
                             }
 
                             if (showTitle) {
-                                $quicknav.toggleClass('showTitleSection');
+                                $quicknav.addClass('showTitleSection');
+                            }
+
+                            set_trigger_label($quicknav, $section);
+                        })
+                        .on('leave', function () {
+                            $section.data('active', 0);
+                            $link.removeClass('active');
+
+                            if (onDark) {
+                                $quicknav.removeClass('onDarkSection');
+                            }
+
+                            if (showTitle) {
+                                $quicknav.removeClass('showTitleSection');
                             }
                         })
                         // .addIndicators() // add indicators (requires plugin)
@@ -362,8 +394,6 @@
                 var height = $(section).outerHeight(true);
                 section_heights[index] = height;
             });
-            // console.log("Sections heights recalculated");
-            // console.log(section_heights);
         }
 
         // RESIZE SCENES
