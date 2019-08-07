@@ -49,7 +49,7 @@
             // Init vars.
             var
                 $quicknav = $(this),
-                $sections = $(settings.section_class);
+                $sections = $(settings.section_class + '[' + settings.section_title + ']'); // Seulement les sections qui ont un titre defined.
 
             construct_quicknav($quicknav, $sections);
             click_on_trigger_event($quicknav);

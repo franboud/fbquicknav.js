@@ -42,7 +42,7 @@ Default: `.jsQuicknav__section`. This is the class name of the sections that wil
 Default: `.jsQuicknav__hide`. When the quicknav reaches this section, it will hide automatically.
 
 ### section_title
-Default: `data-quicknav-title`. Data attribute for the title of the section, displayed in the quick nav.
+Required. Default: `data-quicknav-title`. Data attribute for the title of the section, displayed in the quick nav.
 
 ### scroll_offset
 Default: `-100`. Offset of the scroll when we click on a quick nav link.
