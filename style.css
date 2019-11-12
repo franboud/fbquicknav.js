@@ -1,24 +1,24 @@
 /*  QUICKNAV
     Quick nav sticky at right of some pages. */
-    .quicknav {display: block;background: red;position: fixed;top: 0;right: 0;box-sizing: border-box;width: 100vh;height: 6vw;z-index: 5;transform: rotate(-90deg) translateY(-100%);transform-origin: 100% 0%; opacity: 0;transition: opacity 0.5s;}
-    .quicknav__items {display: flex;height: 100%;align-items: center;}
-    .quicknav__item {display: block;color: #000;text-decoration: none;text-transform: uppercase;flex: 1 1 auto;white-space: nowrap;text-align: center;padding: 1vw 0;}
-    .quicknav__text { }
+    .quickNav {display: block;background: red;position: fixed;top: 0;right: 0;box-sizing: border-box;width: 100vh;height: 6vw;z-index: 5;transform: rotate(-90deg) translateY(-100%);transform-origin: 100% 0%; opacity: 0;transition: opacity 0.5s;}
+    .quickNav__items {display: flex;height: 100%;align-items: center;}
+    .quickNav__item {display: block;color: #000;text-decoration: none;text-transform: uppercase;flex: 1 1 auto;white-space: nowrap;text-align: center;padding: 1vw 0;}
+    .quickNav__text { }
 
         /* Init */
-        .quicknav.isInit {opacity: 1;}
+        .quickNav.isInit {opacity: 1;}
 
         /* Hover */
-        .quicknav__item:hover {color: blue;}
+        .quickNav__item:hover {color: blue;}
 
         /* Active */
-        .quicknav__item.active {color: blue;}
+        .quickNav__item.active {color: blue;}
 
         /* Hide */
-        .quicknav--hide {opacity: 0;}
+        .quickNav--hide {opacity: 0;}
 
 
     /* Hidden on small screens */
     @media (max-width:991px) {
-        .quicknav {display: none;}
+        .quickNav {display: none;}
     }

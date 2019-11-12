@@ -4,12 +4,12 @@ This plugin is to automatically create a quick nav to navigate in different sect
 
 ## Usage
 ### JS init
-`$(".jsQuicknav").fbquicknav();`
+`$(".jsQuickNav").fbquicknav();`
 
 ### HTML
-Add this in your HTML: `<div class="quicknav jsQuicknav"></div>` (the `quicknav` class is for CSS styling, and the `jsQuicknav` is to bind it to the JS).
+Add this in your HTML: `<div class="quickNav jsQuickNav"></div>` (the `quickNav` class is for CSS styling, and the `jsQuickNav` is to bind it to the JS).
 
-Add the `jsQuicknav__section` class on each section that you want in the quicknav.
+Add the `jsQuickNav__section` class on each section that you want in the quicknav.
 
 ### CSS
 The basic styles are in the `style.css` file. Copy those classes in your project.
@@ -25,9 +25,9 @@ The basic styles are in the `style.css` file. Copy those classes in your project
 ## Options (and default values)
 Some options are configurable, others aren't. You can set them when you create your quick nav instance, like this :
 ```js
-$(".jsQuicknav").fbquicknav({
-    section_class: ".jsQuicknav__section",
-    section_class_hide: ".jsQuicknav__hide",
+$(".jsQuickNav").fbquicknav({
+    section_class: ".jsQuickNav__section",
+    section_class_hide: ".jsQuickNav__hide",
     section_title: "data-quicknav-title",
     scroll_offset: -100,
     scroll_duration: 500,
@@ -36,10 +36,10 @@ $(".jsQuicknav").fbquicknav({
 ```
 
 ### section_class
-Default: `.jsQuicknav__section`. This is the class name of the sections that will be added in the quicknav.
+Default: `.jsQuickNav__section`. This is the class name of the sections that will be added in the quicknav.
 
 ### section_class_hide
-Default: `.jsQuicknav__hide`. When the quicknav reaches this section, it will hide automatically.
+Default: `.jsQuickNav__hide`. When the quicknav reaches this section, it will hide automatically.
 
 ### section_title
 Required. Default: `data-quicknav-title`. Data attribute for the title of the section, displayed in the quick nav.
@@ -57,7 +57,7 @@ Default: `false`. Add a button to open and close the quicknav.
 Default: `false`. Calculate each of the section heights, makes the 'active' classes match exactly the height of each section.
 
 ### Quicknav main title
-You can set a main title for your quicknav with the attribute `data-quicknav-main-title` on the quicknav tag: `<div class="quicknav jsQuicknav" data-quicknav-main-title="Main title"></div>`.
+You can set a main title for your quicknav with the attribute `data-quicknav-main-title` on the quicknav tag: `<div class="quickNav jsQuickNav" data-quicknav-main-title="Main title"></div>`.
 
 ### Quicknav main title show
 The main title will show only on the sections that you decide. The sections that have the attribute `data-quicknav-main-title-show="1"` will add a `showTitleSection` class to your quicknav to show the main title.
