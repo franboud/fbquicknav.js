@@ -15,7 +15,7 @@
         .quickNav__item.active {color: blue;}
 
         /* Hide */
-        .quickNav--hide {opacity: 0;}
+        .quickNav.quickNav--hide {opacity: 0;}
 
 
     /* Hidden on small screens */
