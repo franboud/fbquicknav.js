@@ -1,9 +1,16 @@
 /*  QUICKNAV
     Quick nav sticky at right of some pages. */
     .quickNav {display: block;background: red;position: fixed;top: 0;right: 0;box-sizing: border-box;width: 100vh;height: 6vw;z-index: 5;transform: rotate(-90deg) translateY(-100%);transform-origin: 100% 0%; opacity: 0;transition: opacity 0.5s;}
+    .quickNav__in {width: 100%;background-color: transparent;transition: background 0.4s;}
     .quickNav__items {display: flex;height: 100%;align-items: center;}
     .quickNav__item {display: block;color: #000;text-decoration: none;text-transform: uppercase;flex: 1 1 auto;white-space: nowrap;text-align: center;padding: 1vw 0;}
     .quickNav__text { }
+
+    .quickNav__trigger {position: relative;cursor: pointer;background: none;display: flex;align-items: center;text-align: center;width: 100%;max-width: 100%;padding: 1.4em 0;margin: 0;border: none;color: #147b8c;text-transform: uppercase;outline: none;font-size: 1em;line-height: 1.2;font-weight: normal;text-decoration: none;box-sizing: border-box;border-radius: 0;-webkit-appearance: none;-moz-appearance: none;appearance: none;display: none;}
+	.quickNav__triggerLabel {display:block;flex: 1 1 auto; }
+	.quickNav__triggerIcon {display: block;position: absolute;right: 0;top: 50%;transform: translateY(-50%);color: red;}
+	.quickNav__triggerOpen {display: block; }
+	.quickNav__triggerClose {display: none; }
 
         /* Init */
         .quickNav.isInit {opacity: 1;}
@@ -22,3 +29,23 @@
     @media (max-width:991px) {
         .quickNav {display: none;}
     }
+
+	/* Quicknav devient dropdown. */
+	@media (max-width:991px) {
+		.quickNav { }
+		.quickNav__in {padding: 0;background: #fff;}
+		.quickNav__items {display: none;height: auto;padding-bottom: 1em;}
+		.quickNav__item {padding: 1em 0;margin: 0;}
+		.quickNav__text { }
+
+		.quickNav__trigger {display: flex;}
+		.quickNav__triggerLabel { }
+		.quickNav__triggerIcon { }
+		.quickNav__triggerOpen { }
+		.quickNav__triggerClose { }
+
+		/* STATE / Open */
+		.quickNav.open .quickNav__items {display: block;}
+		.quickNav.open .quickNav__triggerOpen {display: none; }
+		.quickNav.open .quickNav__triggerClose {display: block; }
+	}

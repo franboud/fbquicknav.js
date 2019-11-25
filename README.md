@@ -12,7 +12,7 @@ Add this in your HTML: `<div class="quickNav jsQuickNav"></div>` (the `quickNav`
 Add the `jsQuickNav__section` class on each section that you want in the quicknav.
 
 ### CSS
-The basic styles are in the `style.css` file. Copy those classes in your project.
+The basic styles are in the `style.css` file. Copy those classes in your project for a CSS base.
 
 
 ## Required
@@ -22,39 +22,45 @@ The basic styles are in the `style.css` file. Copy those classes in your project
 * [LoDash](https://lodash.com/) _.debounce
 
 
-## Options (and default values)
-Some options are configurable, others aren't. You can set them when you create your quick nav instance, like this :
+## Options
+Configurable options for the plugin. The default values are shown.
+
 ```js
 $(".jsQuickNav").fbquicknav({
+    
+    // Class name of the sections that will be added in the quicknav.
     section_class: ".jsQuickNav__section",
-    section_class_hide: ".jsQuickNav__hide",
+
+    // Required. Data attribute for the title of the section, displayed in the quick nav.
     section_title: "data-quicknav-title",
+
+    // When the quicknav reaches this section, it will hide automatically.
+    section_class_hide: ".jsQuickNav__hide",
+    
+    // Offset of the scroll, in px.
     scroll_offset: -100,
+    
+    // Duration of the scroll, in ms.
     scroll_duration: 500,
-    add_trigger: false
+    
+    // Calculate each of the section heights, makes the 'active' classes match exactly the height of each section.
+    calculate_heights: true,
+
+    // Add a button to open and close the quicknav. Useful for the mobile quickNav.
+    add_trigger: false,
+
+    // Place the HTML of the trigger before or after the items.
+    trigger_after_items: false,
+
+    // SVG icons of the trigger.
+    trigger_icon_open: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 79.53L2.5 32.03l11.56-11.56L50 56.41l35.94-35.94L97.5 32.03z"/></svg>',
+    trigger_icon_close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M1.004 89.605l88.6-88.6 9.397 9.397-88.6 88.6z"/><path d="M1.004 10.394L10.402.997l88.6 88.6-9.398 9.397z"/></svg>',
+
 });
 ```
 
-### section_class
-Default: `.jsQuickNav__section`. This is the class name of the sections that will be added in the quicknav.
 
-### section_class_hide
-Default: `.jsQuickNav__hide`. When the quicknav reaches this section, it will hide automatically.
-
-### section_title
-Required. Default: `data-quicknav-title`. Data attribute for the title of the section, displayed in the quick nav.
-
-### scroll_offset
-Default: `-100`. Offset of the scroll when we click on a quick nav link.
-
-### scroll_duration
-Default: `500`. Duration of the scroll, in ms.
-
-### add_trigger
-Default: `false`. Add a button to open and close the quicknav.
-
-### calculate_heights
-Default: `false`. Calculate each of the section heights, makes the 'active' classes match exactly the height of each section.
+## Other options
 
 ### Quicknav main title
 You can set a main title for your quicknav with the attribute `data-quicknav-main-title` on the quicknav tag: `<div class="quickNav jsQuickNav" data-quicknav-main-title="Main title"></div>`.

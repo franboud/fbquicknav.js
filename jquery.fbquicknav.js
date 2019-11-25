@@ -1,6 +1,6 @@
 /**
  * Quick Nav jQuery plugin.
- * Version 1.6.1
+ * Version 1.7
  *
  * Required:
  *    - jQuery (tested on jQuery v3.1.1)
@@ -17,8 +17,11 @@
  *    - section_title --> data-quicknav-title --> Data attribute for the title of the section, displayed in the quick nav.
  *    - scroll_offset --> -100 (px) --> Offset of the scroll when we click on a quick nav link.
  *    - scroll_duration --> 500 (ms) --> Duration of the scroll.
- *    - add_trigger --> false | true --> Add a button to open and close the quicknav.
  *    - calculate_heights --> false | true --> Calculate each of the section heights, makes the 'active' classes match exactly the height of each section.
+ *    - add_trigger --> false | true --> Add a button to open and close the quicknav.
+ *    - trigger_after_items --> false | true --> Position of the trigger: before or after the items.
+ *    - trigger_icon_open --> SVG --> SVG of the icon of the trigger to show the items.
+ *    - trigger_icon_close --> SVG --> SVG of the icon of the trigger to hide the items.
  */
 
 (function ($) {
@@ -29,12 +32,15 @@
         // Default options.
         var settings = $.extend({
             section_class: ".jsQuickNav__section",
-            section_class_hide: ".jsQuickNav__hide",
             section_title: "data-quicknav-title",
+            section_class_hide: ".jsQuickNav__hide",
             scroll_offset: -100,
             scroll_duration: 500,
+            calculate_heights: true,
             add_trigger: false,
-            calculate_heights: true
+            trigger_after_items: false,
+            trigger_icon_open: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 79.53L2.5 32.03l11.56-11.56L50 56.41l35.94-35.94L97.5 32.03z"/></svg>',
+            trigger_icon_close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M1.004 89.605l88.6-88.6 9.397 9.397-88.6 88.6z"/><path d="M1.004 10.394L10.402.997l88.6 88.6-9.398 9.397z"/></svg>',
         }, options);
 
 
@@ -75,8 +81,20 @@
 
         // CONSTRUCTOR
         function construct_quicknav($quicknav, $sections) {
-            // Create each section in the quicknav and add the title.
-            var $items = $("<div>", {
+
+            /**
+             * CHECK
+             * Check if the HTML was harcoded, if yes : don't create it again.
+             */
+            var $items = $(".quickNav__items", $quicknav);
+            if ($items.length > 0) { return; }
+
+
+            /**
+             * ITEMS
+             * Container of all the items.
+             */
+            $items = $("<div>", {
                 "class": "quickNav__items jsQuickNav__ctn"
             });
 
@@ -88,12 +106,12 @@
                 // Element that will be added to the page.
                 var $item = $(
                     '<a>', {
-                        'href': '#',
-                        'class': 'quickNav__item',
-                        'html': $(
-                            '<span class="quickNav__text">' + title + '</span>'
-                        )
-                    }
+                    'href': '#',
+                    'class': 'quickNav__item',
+                    'html': $(
+                        '<span class="quickNav__text">' + title + '</span>'
+                    )
+                }
                 );
 
                 // Links item to section.
@@ -108,36 +126,57 @@
 
 
             /**
-             * Title of the quicknav
+             * TITLE
+             * Title of the quicknav, optional.
              */
             var quicknavTitle = $quicknav.attr('data-quicknav-main-title');
 
             if (typeof quicknavTitle !== 'undefined') {
                 var $divCarrieres = $(
                     "<div>", {
-                        "class": "quickNav__carrieres",
-                        "html": quicknavTitle
-                    });
+                    "class": "quickNav__carrieres",
+                    "html": quicknavTitle
+                });
 
                 $quicknav.append($divCarrieres);
             }
 
-
             $quicknav.append($items);
 
 
-            // Trigger to open / close quicknav
+            /**
+             * TRIGGER
+             * Trigger to open / close quicknav
+             */
             if (settings.add_trigger === true) {
                 var trigger = ' ' +
-                    '<button type="button" class="quickNav__trigger jsQuickNav__trigger">' +
-                    '<span class="quickNav__triggerLabel jsQuickNav__triggerLabel"></span>' +
-                    '<svg class="icon quickNav__triggerIcon quickNav__triggerOpen"><use xlink:href="#icon-arrow-down" /></svg>' +
-                    '<svg class="icon quickNav__triggerIcon quickNav__triggerClose"><use xlink:href="#icon-close" /></svg>' +
+                    '<button type="button" class="quickNav__trigger jsQuickNav__trigger"> ' +
+                    '<span class="quickNav__triggerLabel jsQuickNav__triggerLabel"> </span> ' +
+                    '<span class="quickNav__triggerIcon"> ' +
+                    '<span class="svgIcon quickNav__triggerOpen">' + settings.trigger_icon_open + '</span> ' +
+                    '<span class="svgIcon quickNav__triggerClose">' + settings.trigger_icon_close + '</span> ' +
+                    '</span> ' +
                     '</button>';
 
-                $quicknav.append(trigger);
+                // Avant ou apres la liste d'items
+                if (settings.trigger_after_items) {
+                    $quicknav.append(trigger);
+                } else {
+                    $quicknav.prepend(trigger);
+                }
+
+                // Par default : on met le nom de la premiere section dans le trigger label.
+                set_trigger_label($quicknav, $($sections[0]));
             }
+
+
+            /**
+             * WRAP
+             * Wrap everything in a __in div.
+             */
+            $quicknav.wrapInner('<div class="quickNav__in"></div>');
         }
+
 
 
         // CLICK ON TRIGGER EVENT.
@@ -153,9 +192,7 @@
 
             // QUICKNAV TOGGLE : Quicknav toggle.
             $trigger.on("click", function (evt) {
-                var $this = $(this);
-
-                if (!$quicknav_container.hasClass("on")) {
+                if (!$quicknav.hasClass('open')) {
                     // Quicknav not open, so we open it.
                     open_quicknav($quicknav);
                 } else {
@@ -182,22 +219,12 @@
 
 
         function open_quicknav($quicknav) {
-            var
-                $trigger = $(".jsQuickNav__trigger", $quicknav),
-                $quicknav_container = $(".jsQuickNav__ctn", $quicknav);
-
-            $quicknav_container.addClass("on");
-            $trigger.addClass("on");
+            $quicknav.addClass('open');
             quicknav_is_open = true;
         }
 
         function close_quicknav($quicknav) {
-            var
-                $trigger = $(".jsQuickNav__trigger", $quicknav),
-                $quicknav_container = $(".jsQuickNav__ctn", $quicknav);
-
-            $quicknav_container.removeClass("on");
-            $trigger.removeClass("on");
+            $quicknav.removeClass('open');
             quicknav_is_open = false;
         }
 
