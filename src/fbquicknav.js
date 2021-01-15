@@ -3,25 +3,26 @@
  * Version 2.0
  *
  * Required:
- *    - LoDash _.debounce et _.throttle
+ *    - LoDash _.throttle
  *
  * Pour activer :
  *	  new FBQuickNav('.jsQuicknav');
  *    const quickNav = new FBQuickNav('.jsQuicknav');
+ *    const quickNav = new FBQuickNav('.jsQuicknav', { options });
  *
  * Options configurables :
- *    - section_class --> .jsQuickNav__section --> Sections added in the quick nav.
- *    - section_title --> data-quicknav-title --> Data attribute for the title of the section, displayed in the quick nav.
- *    - section_class_hide --> .jsQuickNav__hide --> When the quicknav reaches this section, hide it.
- *    - scroll_offset --> -100 (px) --> Offset of the scroll when we click on a quick nav link.
- *    - add_trigger --> false | true --> Add a button to open and close the quicknav.
- *    - trigger_after_items --> false | true --> Position of the trigger: before or after the items.
- *    - trigger_icon_open --> SVG --> SVG of the icon of the trigger to show the items.
- *    - trigger_icon_close --> SVG --> SVG of the icon of the trigger to hide the items.
+ *    - section_class --> Sections added in the quick nav.
+ *    - section_title --> Data attribute for the title of the section, displayed in the quick nav.
+ *    - section_class_hide --> When the quicknav reaches this section, hide it.
+ *    - scroll_offset --> Offset when scrolling to a section.
+ *    - add_trigger --> Add a button to open and close the quicknav.
+ *    - trigger_after_items --> Position of the trigger: before or after the items.
+ *    - trigger_icon_open --> SVG of the icon of the trigger to show the items.
+ *    - trigger_icon_close --> SVG of the icon of the trigger to hide the items.
  */
 
 class FBQuickNav {
-	constructor(selector) {
+	constructor(selector, options) {
 		this.selector = selector;
 		this.quicknavEl = document.querySelector(this.selector);
 
@@ -30,20 +31,22 @@ class FBQuickNav {
 			return;
 		}
 
-
+		// Default settings
 		this.settings = {
 			section_class: ".jsQuickNav__section",
 			section_title: "data-quicknav-title",
-			section_class_hide: ".footer",
+			section_class_hide: ".jsQuickNav__hide",
 			scroll_offset: -120,
 			add_trigger: true,
 			trigger_after_items: false,
-			// trigger_icon_open: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 79.53L2.5 32.03l11.56-11.56L50 56.41l35.94-35.94L97.5 32.03z"/></svg>',
-			// trigger_icon_close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M1.004 89.605l88.6-88.6 9.397 9.397-88.6 88.6z"/><path d="M1.004 10.394L10.402.997l88.6 88.6-9.398 9.397z"/></svg>',
-			trigger_icon_open: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M24 28.82l.75-.65 8.4-7.27-1.49-1.72L24 25.81l-7.66-6.63-1.49 1.72 8.4 7.27.75.65z"/></svg>',
-			trigger_icon_close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M34.53 34.4l-.09.1a1.11 1.11 0 01-1.82 0L24 25.93l-8.57 8.57a1.1 1.1 0 01-1.82 0l-.14-.1a1.11 1.11 0 010-1.82L22.09 24l-8.57-8.6a1.09 1.09 0 010-1.82l.09-.1a1.12 1.12 0 011.82 0L24 22.05l8.57-8.57a1.12 1.12 0 011.82 0l.09.1a1.11 1.11 0 010 1.82L25.92 24l8.61 8.61a1.12 1.12 0 010 1.79z"/></svg>',
+			trigger_icon_open: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 79.53L2.5 32.03l11.56-11.56L50 56.41l35.94-35.94L97.5 32.03z"/></svg>',
+			trigger_icon_close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M1.004 89.605l88.6-88.6 9.397 9.397-88.6 88.6z"/><path d="M1.004 10.394L10.402.997l88.6 88.6-9.398 9.397z"/></svg>',
 		}
 
+		// Merge options in the settings
+		this.settings = Object.assign(this.settings, options);
+
+		// Init this plugin
 		this.init();
 	}
 
