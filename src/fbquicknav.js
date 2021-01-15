@@ -51,11 +51,11 @@ class FBQuickNav {
 		this.sectionsEl = document.querySelectorAll(this.settings.section_class + '[' + this.settings.section_title + ']'); // Seulement les sections qui ont un titre defined.
 
 		this.build_html();
-		this.click_on_quicknav_event();
-		this.toggle_quicknav_classes();
-		this.click_on_trigger_event();
+		this.click_items_events();
+		this.scroll_activate_items();
+		this.open_close_trigger();
 		this.close_on_scroll();
-		this.toggle_hide_quicknav();
+		this.hide_quicknav();
 
 		// Tout est fait, init quicknav
 		this.quicknavEl.classList.add("isInit");
@@ -177,10 +177,78 @@ class FBQuickNav {
 
 
 	/**
+	 * Click on the quicknav link.
+	 * When there's a click, the page scrolls to the chosen section.
+	 */
+	click_items_events() {
+		this.quicknavEl.addEventListener("click", (evt) => {
+			// On cible seulement les liens <a>
+			// ATTENTION! closest bubbles up jusqu'au document.
+			const linkEl = evt.target.closest("a.quickNav__item");
+			if (!linkEl) { return };
+			evt.preventDefault();
+
+
+			const section_index = linkEl.getAttribute("data-quicknav-index");
+			const sectionEl = this.find_section_by_index(section_index);
+
+			if (sectionEl != null) {
+				this.go_to_section(sectionEl);
+			}
+		});
+	}
+
+
+	/**
+	 * Gerer l'activation automatique des classes "active" sur les items.
+	 * Quand le user scroll, on indique sur quelle section on se trouve.
+	 */
+	scroll_activate_items() {
+		this.sectionsEl.forEach((sectionEl) => {
+			const
+				sectionIndex = sectionEl.getAttribute("data-quicknav-index"),
+				linkEl = this.find_link_by_index(sectionIndex);
+
+
+			ScrollTrigger.create({
+				trigger: sectionEl,
+
+				// Describes a place on the trigger and a place on the scroller 
+				// that must meet in order to start the ScrollTrigger.
+				// Example:
+				// "top center" = "when the top of the trigger hits the center of the scroller"
+				// "bottom 80%" = "when the bottom of the trigger hits 80% down from the top of the viewport" 
+				start: "top center",
+				end: "bottom center",
+
+				// Gestion custom des events
+				onEnter: () => {
+					linkEl.classList.add("active");
+					this.set_trigger_label(sectionEl);
+				},
+				onLeave: () => {
+					linkEl.classList.remove("active")
+				},
+				onEnterBack: () => {
+					linkEl.classList.add("active")
+					this.set_trigger_label(sectionEl);
+				},
+				onLeaveBack: () => {
+					linkEl.classList.remove("active")
+				},
+
+				// markers: true,
+				// id: "section " + sectionIndex,
+			});
+		});
+	}
+
+
+	/**
 	 * Click on the trigger button.
 	 * Open and close the quicknav.
 	 */
-	click_on_trigger_event() {
+	open_close_trigger() {
 		if (this.settings.add_trigger !== true) { return; }
 
 		const triggerEl = this.quicknavEl.querySelector(".jsQuickNav__trigger");
@@ -193,6 +261,51 @@ class FBQuickNav {
 			} else {
 				this.open_quicknav();
 			}
+		});
+	}
+
+
+	/**
+	 * Close the quicknav on scroll
+	 */
+	close_on_scroll() {
+		if (this.settings.add_trigger !== true) { return; }
+
+		window.addEventListener('scroll', _.throttle(() => {
+			if (this.quicknavEl.classList.contains("open")) {
+				this.close_quicknav();
+			}
+		}, 300));
+	}
+
+
+	/**
+	 * Hide the quicknav
+	 * When the window reach a section, hide the quicknav.
+	 * Usually, this section is the footer.
+	 */
+	hide_quicknav() {
+		const hideHereEl = document.querySelector(this.settings.section_class_hide);
+		if (!hideHereEl) { return; }
+
+
+		ScrollTrigger.create({
+			trigger: hideHereEl,
+			toggleClass: { targets: this.quicknavEl, className: "quickNav--hide" },
+
+			// Describes a place on the trigger and a place on the scroller 
+			// that must meet in order to start the ScrollTrigger.
+			// Example:
+			// "top center" = "when the top of the trigger hits the center of the scroller"
+			// "bottom 80%" = "when the bottom of the trigger hits 80% down from the top of the viewport" 
+			start: "top 25%",
+
+			// Ce code permet de ne pas avoir de fin au ScrollTrigger
+			endTrigger: "html",
+			end: "bottom top",
+
+			// markers: true,
+			// id: "hide quicknav",
 		});
 	}
 
@@ -213,20 +326,6 @@ class FBQuickNav {
 
 
 	/**
-	 * Close the quicknav on scroll
-	 */
-	close_on_scroll() {
-		if (this.settings.add_trigger !== true) { return; }
-
-		window.addEventListener('scroll', _.throttle(() => {
-			if (this.quicknavEl.classList.contains("open")) {
-				this.close_quicknav();
-			}
-		}, 300));
-	}
-
-
-	/**
 	 * Open the quicknav
 	 */
 	open_quicknav() {
@@ -239,29 +338,6 @@ class FBQuickNav {
 	 */
 	close_quicknav() {
 		this.quicknavEl.classList.remove('open');
-	}
-
-
-	/**
-	 * Click on the quicknav link.
-	 * When there's a click, the page scrolls to the chosen section.
-	 */
-	click_on_quicknav_event() {
-		this.quicknavEl.addEventListener("click", (evt) => {
-			// On cible seulement les liens <a>
-			// ATTENTION! closest bubbles up jusqu'au document.
-			const linkEl = evt.target.closest("a.quickNav__item");
-			if (!linkEl) { return };
-			evt.preventDefault();
-
-
-			const section_index = linkEl.getAttribute("data-quicknav-index");
-			const sectionEl = this.find_section_by_index(section_index);
-
-			if (sectionEl != null) {
-				this.go_to_section(sectionEl);
-			}
-		});
 	}
 
 
@@ -315,82 +391,5 @@ class FBQuickNav {
 		// 	block: 'center', // Defines vertical alignment. default: start
 		// 	inline: 'nearest' // Defines horizontal alignment. default: nearest
 		// });
-	}
-
-
-
-	/**
-	 * Gerer l'activation automatique des classes "active" sur les items.
-	 * Quand le user scroll, on indique sur quelle section on se trouve.
-	 */
-	toggle_quicknav_classes() {
-		this.sectionsEl.forEach((sectionEl) => {
-			const
-				sectionIndex = sectionEl.getAttribute("data-quicknav-index"),
-				linkEl = this.find_link_by_index(sectionIndex);
-
-
-			ScrollTrigger.create({
-				trigger: sectionEl,
-
-				// Describes a place on the trigger and a place on the scroller 
-				// that must meet in order to start the ScrollTrigger.
-				// Example:
-				// "top center" = "when the top of the trigger hits the center of the scroller"
-				// "bottom 80%" = "when the bottom of the trigger hits 80% down from the top of the viewport" 
-				start: "top center",
-				end: "bottom center",
-
-				// Gestion custom des events
-				onEnter: () => {
-					linkEl.classList.add("active");
-					this.set_trigger_label(sectionEl);
-				},
-				onLeave: () => {
-					linkEl.classList.remove("active")
-				},
-				onEnterBack: () => {
-					linkEl.classList.add("active")
-					this.set_trigger_label(sectionEl);
-				},
-				onLeaveBack: () => {
-					linkEl.classList.remove("active")
-				},
-
-				// markers: true,
-				// id: "section " + sectionIndex,
-			});
-		});
-	}
-
-
-	/**
-	 * Hide the quicknav
-	 * When the window reach a section, hide the quicknav.
-	 * Usually, this section is the footer.
-	 */
-	toggle_hide_quicknav() {
-		const hideHereEl = document.querySelector(this.settings.section_class_hide);
-		if (!hideHereEl) { return; }
-
-
-		ScrollTrigger.create({
-			trigger: hideHereEl,
-			toggleClass: { targets: this.quicknavEl, className: "quickNav--hide" },
-
-			// Describes a place on the trigger and a place on the scroller 
-			// that must meet in order to start the ScrollTrigger.
-			// Example:
-			// "top center" = "when the top of the trigger hits the center of the scroller"
-			// "bottom 80%" = "when the bottom of the trigger hits 80% down from the top of the viewport" 
-			start: "top 25%",
-
-			// Ce code permet de ne pas avoir de fin au ScrollTrigger
-			endTrigger: "html",
-			end: "bottom top",
-
-			// markers: true,
-			// id: "hide quicknav",
-		});
 	}
 }
