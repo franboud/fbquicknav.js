@@ -4,6 +4,7 @@
  *
  * Required:
  *    - LoDash _.throttle
+ *	  - GSAP with ScrollTrigger
  *
  * Pour activer :
  *	  new FBQuickNav('.jsQuicknav');
@@ -11,12 +12,12 @@
  *    const quickNav = new FBQuickNav('.jsQuicknav', { options });
  *
  * Options configurables :
- *    - section_class --> Sections added in the quick nav.
+ *    - section_class --> Class name of the sections added in the quick nav.
  *    - section_title --> Data attribute for the title of the section, displayed in the quick nav.
  *    - section_class_hide --> When the quicknav reaches this section, hide it.
  *    - scroll_offset --> Offset when scrolling to a section.
  *    - add_trigger --> Add a button to open and close the quicknav.
- *    - trigger_after_items --> Position of the trigger: before or after the items.
+ *    - trigger_after_items --> Position of the trigger HTML: before or after the items.
  *    - trigger_icon_open --> SVG of the icon of the trigger to show the items.
  *    - trigger_icon_close --> SVG of the icon of the trigger to hide the items.
  */
@@ -36,8 +37,8 @@ class FBQuickNav {
 			section_class: ".jsQuickNav__section",
 			section_title: "data-quicknav-title",
 			section_class_hide: ".jsQuickNav__hide",
-			scroll_offset: -120,
-			add_trigger: true,
+			scroll_offset: -100,
+			add_trigger: false,
 			trigger_after_items: false,
 			trigger_icon_open: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 79.53L2.5 32.03l11.56-11.56L50 56.41l35.94-35.94L97.5 32.03z"/></svg>',
 			trigger_icon_close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M1.004 89.605l88.6-88.6 9.397 9.397-88.6 88.6z"/><path d="M1.004 10.394L10.402.997l88.6 88.6-9.398 9.397z"/></svg>',
