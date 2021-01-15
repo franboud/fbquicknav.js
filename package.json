@@ -1,0 +1,22 @@
+{
+  "name": "sitewebbase",
+  "version": "1.0.0",
+  "author": "Francis Boudreau",
+  "description": "Base plugin FBQuickNav",
+  "private": true,
+  "main": "Gruntfile.js",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "eslint": "^6.8.0",
+    "grunt": "~1.3.0",
+    "grunt-babel": "^8.0.0",
+    "grunt-contrib-uglify": "^5.0.0",
+    "matchdep": "^2.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "IE 10"
+  ]
+}

@@ -1,6 +1,6 @@
 /**
  * Quick Nav plugin.
- * Version 2.2
+ * Version 2.0
  *
  * Required:
  *    - LoDash _.debounce et _.throttle
