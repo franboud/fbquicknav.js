@@ -1,6 +1,6 @@
 /**
  * Quick Nav plugin.
- * Version 2.0
+ * Version 2.1
  *
  * Required:
  *    - LoDash _.throttle
@@ -24,8 +24,7 @@
 
 class FBQuickNav {
 	constructor(selector, options) {
-		this.selector = selector;
-		this.quicknavEl = document.querySelector(this.selector);
+		this.quicknavEl = document.querySelector(selector);
 
 		// Try to init
 		if (this.quicknavEl == null || typeof this.quicknavEl === "undefined") {
@@ -47,13 +46,18 @@ class FBQuickNav {
 		// Merge options in the settings
 		this.settings = Object.assign(this.settings, options);
 
+		// Cache HTML nodes, for fast and easy access
+		this.nodesEls = [];
+		this.nodesEls['sections'] = [];
+		this.nodesEls['links'] = [];
+		this.nodesEls['titles'] = [];
+
 		// Init this plugin
 		this.init();
 	}
 
 	init() {
-		this.sectionsEl = document.querySelectorAll(this.settings.section_class + '[' + this.settings.section_title + ']'); // Seulement les sections qui ont un titre defined.
-
+		this.get_sections();
 		this.build_html();
 		this.click_items_events();
 		this.scroll_activate_items();
@@ -67,19 +71,27 @@ class FBQuickNav {
 
 
 	/**
+	 * Get the sections that we will use for the quick nav.
+	 * Only the sections that has a title defined.
+	 */
+	get_sections() {
+		const sectionsEl = document.querySelectorAll(this.settings.section_class + '[' + this.settings.section_title + ']');
+
+		sectionsEl.forEach((sectionEl, index) => {
+			// Set section in a var for quick access by index later on.
+			this.nodesEls['sections'][index] = sectionEl;
+
+			// Set title in a var for quick access by index later on.
+			const sectionTitle = sectionEl.getAttribute("data-quicknav-title");
+			this.nodesEls['titles'][index] = sectionTitle;
+		});
+	}
+
+
+	/**
 	 * Creates the HTML and add it to the DOM.
 	 */
 	build_html() {
-
-		/**
-		 * CHECK
-		 * Check if the HTML was harcoded, if yes : don't create it again.
-		 */
-		const itemsCheck = this.quicknavEl.querySelector('.quickNav__items');
-		if (typeof (itemsCheck) != 'undefined' && itemsCheck != null) {
-			return;
-		}
-
 
 		/**
 		 * WRAP
@@ -96,7 +108,7 @@ class FBQuickNav {
 		let itemsEl = document.createElement("div");
 		itemsEl.classList.add('quickNav__items', 'jsQuickNav__ctn');
 
-		this.sectionsEl.forEach((sectionEl, index) => {
+		this.nodesEls['sections'].forEach((sectionEl, index) => {
 			const title = sectionEl.getAttribute(this.settings.section_title);
 
 			// <a>
@@ -109,10 +121,10 @@ class FBQuickNav {
 			spanEl.classList.add("quickNav__text");
 			spanEl.textContent = title;
 
-			// Link the item to the section, for easy access later
-			itemEl.setAttribute("data-quicknav-index", index);
-			sectionEl.setAttribute("data-quicknav-index", index);
+			// Set in this var for quick access by index later on.
+			this.nodesEls['links'][index] = itemEl;
 
+			// Add to the items DOM
 			itemEl.appendChild(spanEl);
 			itemsEl.appendChild(itemEl);
 		});
@@ -165,18 +177,10 @@ class FBQuickNav {
 
 
 		/**
-		 * VAR REFERENCE
-		 * For easy access later on...
-		 */
-		this.linksEL = this.quicknavEl.querySelectorAll("a");
-
-
-		/**
 		 * DEFAULT LABEL
 		 * On met le nom de la premiere section dans le trigger label.
 		 */
-
-		this.set_trigger_label(this.sectionsEl[0]);
+		this.set_trigger_label(0);
 	}
 
 
@@ -185,20 +189,12 @@ class FBQuickNav {
 	 * When there's a click, the page scrolls to the chosen section.
 	 */
 	click_items_events() {
-		this.quicknavEl.addEventListener("click", (evt) => {
-			// On cible seulement les liens <a>
-			// ATTENTION! closest bubbles up jusqu'au document.
-			const linkEl = evt.target.closest("a.quickNav__item");
-			if (!linkEl) { return };
-			evt.preventDefault();
+		this.nodesEls['links'].forEach((linkEl, index) => {
+			linkEl.addEventListener("click", (evt) => {
+				evt.preventDefault();
 
-
-			const section_index = linkEl.getAttribute("data-quicknav-index");
-			const sectionEl = this.find_section_by_index(section_index);
-
-			if (sectionEl != null) {
-				this.go_to_section(sectionEl);
-			}
+				this.go_to_section(this.nodesEls['sections'][index]);
+			});
 		});
 	}
 
@@ -208,11 +204,8 @@ class FBQuickNav {
 	 * Quand le user scroll, on indique sur quelle section on se trouve.
 	 */
 	scroll_activate_items() {
-		this.sectionsEl.forEach((sectionEl) => {
-			const
-				sectionIndex = sectionEl.getAttribute("data-quicknav-index"),
-				linkEl = this.find_link_by_index(sectionIndex);
-
+		this.nodesEls['sections'].forEach((sectionEl, index) => {
+			const linkEl = this.nodesEls['links'][index];
 
 			ScrollTrigger.create({
 				trigger: sectionEl,
@@ -228,14 +221,14 @@ class FBQuickNav {
 				// Gestion custom des events
 				onEnter: () => {
 					linkEl.classList.add("active");
-					this.set_trigger_label(sectionEl);
+					this.set_trigger_label(index);
 				},
 				onLeave: () => {
 					linkEl.classList.remove("active")
 				},
 				onEnterBack: () => {
 					linkEl.classList.add("active")
-					this.set_trigger_label(sectionEl);
+					this.set_trigger_label(index);
 				},
 				onLeaveBack: () => {
 					linkEl.classList.remove("active")
@@ -256,6 +249,8 @@ class FBQuickNav {
 		if (this.settings.add_trigger !== true) { return; }
 
 		const triggerEl = this.quicknavEl.querySelector(".jsQuickNav__trigger");
+		if (!triggerEl) { return; }
+
 
 		triggerEl.addEventListener("click", (evt) => {
 			evt.preventDefault();
@@ -318,14 +313,18 @@ class FBQuickNav {
 	 * Update the trigger label
 	 * Mettre le nom de la section active dans le trigger button.
 	 */
-	set_trigger_label(sectionEl) {
+	set_trigger_label(index) {
 		if (this.settings.add_trigger !== true) { return; }
 
-		const
-			sectionName = sectionEl.getAttribute("data-quicknav-title"),
-			triggerLabelEl = this.quicknavEl.querySelector(".jsQuickNav__triggerLabel");
+		// Init the var, so we won't query it each time
+		if (!this.triggerLabelEl) {
+			this.triggerLabelEl = this.quicknavEl.querySelector(".jsQuickNav__triggerLabel");
+		}
 
-		triggerLabelEl.textContent = sectionName;
+		// If the node exists, update it.
+		if (this.triggerLabelEl) {
+			this.triggerLabelEl.textContent = this.nodesEls['titles'][index];
+		}
 	}
 
 
@@ -346,54 +345,11 @@ class FBQuickNav {
 
 
 	/**
-	 * Trouver une section par index de section (data-quicknav-index).
-	 */
-	find_section_by_index(searchIndex) {
-		let sectionFound = null;
-
-		this.sectionsEl.forEach((sectionEl) => {
-			const sectionIndex = sectionEl.getAttribute("data-quicknav-index");
-
-			if (sectionIndex == searchIndex) {
-				sectionFound = sectionEl;
-			}
-		});
-
-		return sectionFound;
-	}
-
-
-	/**
-	 * Trouver un lien par index de section (data-quicknav-index).
-	 */
-	find_link_by_index(searchIndex) {
-		let linkFound = null;
-
-		this.linksEL.forEach((linkEl) => {
-			const sectionIndex = linkEl.getAttribute("data-quicknav-index");
-
-			if (sectionIndex == searchIndex) {
-				linkFound = linkEl;
-			}
-		});
-
-		return linkFound;
-	}
-
-
-	/**
 	 * Scroll to section
 	 * Centralise le code qui permet de scroller vers une section.
 	 */
 	go_to_section(sectionEl) {
 		const y = sectionEl.getBoundingClientRect().top + window.pageYOffset + this.settings.scroll_offset;
 		window.scrollTo({ top: y, behavior: 'smooth' });
-
-		// Un jour, utiliser ceci?
-		// sectionEl.scrollIntoView({
-		// 	behavior: 'smooth', // Defines the transition animation. default: auto
-		// 	block: 'center', // Defines vertical alignment. default: start
-		// 	inline: 'nearest' // Defines horizontal alignment. default: nearest
-		// });
 	}
 }
