@@ -1,5 +1,6 @@
 # fbquicknav.js
 This vanilla JS plugin creates a quick nav to navigate the sections of a web page.
+
 Take a look at [this working demo](https://franboud.github.io/fbquicknav.js/).
 
 
