@@ -39,32 +39,32 @@ new FBQuickNav('.jsQuickNav', {
     
     // Class name of the sections added in the quick nav.
     // Value: CSS selector
-    section_class: ".jsQuickNav__section",
+    sectionClass: ".jsQuickNav__section",
 
     // Data attribute for the title of the section, displayed in the quick nav.
     // Value: HTML data attribute
-    section_title: "data-quicknav-title",
+    sectionTitle: "data-quicknav-title",
 
     // When the quicknav reaches this section, hide it.
     // Value: CSS selector
-    section_class_hide: ".jsQuickNav__hide",
+    sectionClassHide: ".jsQuickNav__hide",
     
     // Offset when scrolling to a section.
     // Value: pixels
-    scroll_offset: -100,
+    scrollOffset: -100,
     
     // Add a button to open and close the quicknav.
     // Value: boolean
-    add_trigger: false,
+    addTrigger: false,
 
     // Position of the trigger HTML: before or after the items.
     // Value: boolean
-    trigger_after_items: false,
+    triggerAfterItems: false,
 
     // SVG icons of the trigger.
     // Value: SVG
-    trigger_icon_open: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 79.53L2.5 32.03l11.56-11.56L50 56.41l35.94-35.94L97.5 32.03z"/></svg>',
-    trigger_icon_close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M1.004 89.605l88.6-88.6 9.397 9.397-88.6 88.6z"/><path d="M1.004 10.394L10.402.997l88.6 88.6-9.398 9.397z"/></svg>',
+    triggerIconOpen: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 79.53L2.5 32.03l11.56-11.56L50 56.41l35.94-35.94L97.5 32.03z"/></svg>',
+    triggerIconClose: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M1.004 89.605l88.6-88.6 9.397 9.397-88.6 88.6z"/><path d="M1.004 10.394L10.402.997l88.6 88.6-9.398 9.397z"/></svg>',
 
 });
 ```

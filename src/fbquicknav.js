@@ -12,14 +12,14 @@
  *    const quickNav = new FBQuickNav('.jsQuicknav', { options });
  *
  * Options configurables :
- *    - section_class --> Class name of the sections added in the quick nav.
- *    - section_title --> Data attribute for the title of the section, displayed in the quick nav.
- *    - section_class_hide --> When the quicknav reaches this section, hide it.
- *    - scroll_offset --> Offset when scrolling to a section.
- *    - add_trigger --> Add a button to open and close the quicknav.
- *    - trigger_after_items --> Position of the trigger HTML: before or after the items.
- *    - trigger_icon_open --> SVG of the icon of the trigger to show the items.
- *    - trigger_icon_close --> SVG of the icon of the trigger to hide the items.
+ *    - sectionClass --> Class name of the sections added in the quick nav.
+ *    - sectionTitle --> Data attribute for the title of the section, displayed in the quick nav.
+ *    - sectionClassHide --> When the quicknav reaches this section, hide it.
+ *    - scrollOffset --> Offset when scrolling to a section.
+ *    - addTrigger --> Add a button to open and close the quicknav.
+ *    - triggerAfterItems --> Position of the trigger HTML: before or after the items.
+ *    - triggerIconOpen --> SVG of the icon of the trigger to show the items.
+ *    - triggerIconClose --> SVG of the icon of the trigger to hide the items.
  */
 
 class FBQuickNav {
@@ -33,14 +33,14 @@ class FBQuickNav {
 
 		// Default settings
 		this.settings = {
-			section_class: ".jsQuickNav__section",
-			section_title: "data-quicknav-title",
-			section_class_hide: ".jsQuickNav__hide",
-			scroll_offset: -100,
-			add_trigger: false,
-			trigger_after_items: false,
-			trigger_icon_open: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 79.53L2.5 32.03l11.56-11.56L50 56.41l35.94-35.94L97.5 32.03z"/></svg>',
-			trigger_icon_close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M1.004 89.605l88.6-88.6 9.397 9.397-88.6 88.6z"/><path d="M1.004 10.394L10.402.997l88.6 88.6-9.398 9.397z"/></svg>',
+			sectionClass: ".jsQuickNav__section",
+			sectionTitle: "data-quicknav-title",
+			sectionClassHide: ".jsQuickNav__hide",
+			scrollOffset: -100,
+			addTrigger: false,
+			triggerAfterItems: false,
+			triggerIconOpen: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 79.53L2.5 32.03l11.56-11.56L50 56.41l35.94-35.94L97.5 32.03z"/></svg>',
+			triggerIconClose: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M1.004 89.605l88.6-88.6 9.397 9.397-88.6 88.6z"/><path d="M1.004 10.394L10.402.997l88.6 88.6-9.398 9.397z"/></svg>',
 		}
 
 		// Merge options in the settings
@@ -57,13 +57,13 @@ class FBQuickNav {
 	}
 
 	init() {
-		this.get_sections();
-		this.build_html();
-		this.click_items_events();
-		this.scroll_activate_items();
-		this.open_close_trigger();
-		this.close_on_scroll();
-		this.hide_quicknav();
+		this.getSections();
+		this.buildHTML();
+		this.clickItemsEvents();
+		this.scrollActivateItems();
+		this.triggerEvents();
+		this.closeOnScroll();
+		this.hideQuickNav();
 
 		// Tout est fait, init quicknav
 		this.quicknavEl.classList.add("isInit");
@@ -74,8 +74,8 @@ class FBQuickNav {
 	 * Get the sections that we will use for the quick nav.
 	 * Only the sections that has a title defined.
 	 */
-	get_sections() {
-		const sectionsEl = document.querySelectorAll(this.settings.section_class + '[' + this.settings.section_title + ']');
+	getSections() {
+		const sectionsEl = document.querySelectorAll(this.settings.sectionClass + '[' + this.settings.sectionTitle + ']');
 
 		sectionsEl.forEach((sectionEl, index) => {
 			// Set section in a var for quick access by index later on.
@@ -91,7 +91,7 @@ class FBQuickNav {
 	/**
 	 * Creates the HTML and add it to the DOM.
 	 */
-	build_html() {
+	buildHTML() {
 
 		/**
 		 * WRAP
@@ -109,7 +109,7 @@ class FBQuickNav {
 		itemsEl.classList.add('quickNav__items', 'jsQuickNav__ctn');
 
 		this.nodesEls['sections'].forEach((sectionEl, index) => {
-			const title = sectionEl.getAttribute(this.settings.section_title);
+			const title = sectionEl.getAttribute(this.settings.sectionTitle);
 
 			// <a>
 			let itemEl = document.createElement("a");
@@ -136,7 +136,7 @@ class FBQuickNav {
 		 * TRIGGER
 		 * Trigger to open / close quicknav
 		 */
-		if (this.settings.add_trigger === true) {
+		if (this.settings.addTrigger === true) {
 			let buttonEl = document.createElement("button");
 			buttonEl.type = "button";
 			buttonEl.classList.add("quickNav__trigger", "jsQuickNav__trigger");
@@ -149,11 +149,11 @@ class FBQuickNav {
 
 			let buttonIconOpen = document.createElement("span");
 			buttonIconOpen.classList.add("svgIcon", "quickNav__triggerOpen");
-			buttonIconOpen.innerHTML = this.settings.trigger_icon_open;
+			buttonIconOpen.innerHTML = this.settings.triggerIconOpen;
 
 			let buttonIconClose = document.createElement("span");
 			buttonIconClose.classList.add("svgIcon", "quickNav__triggerClose");
-			buttonIconClose.innerHTML = this.settings.trigger_icon_close;
+			buttonIconClose.innerHTML = this.settings.triggerIconClose;
 
 			buttonIcons.appendChild(buttonIconOpen);
 			buttonIcons.appendChild(buttonIconClose);
@@ -161,7 +161,7 @@ class FBQuickNav {
 			buttonEl.appendChild(buttonIcons);
 
 			// Avant ou apres la liste d'items
-			if (this.settings.trigger_after_items) {
+			if (this.settings.triggerAfterItems) {
 				quicknavInEl.appendChild(buttonEl);
 			} else {
 				quicknavInEl.insertBefore(buttonEl, quicknavInEl.firstChild);
@@ -188,7 +188,7 @@ class FBQuickNav {
 	 * Click on the quicknav link.
 	 * When there's a click, the page scrolls to the chosen section.
 	 */
-	click_items_events() {
+	clickItemsEvents() {
 		this.nodesEls['links'].forEach((linkEl, index) => {
 			linkEl.addEventListener("click", (evt) => {
 				evt.preventDefault();
@@ -203,7 +203,7 @@ class FBQuickNav {
 	 * Gerer l'activation automatique des classes "active" sur les items.
 	 * Quand le user scroll, on indique sur quelle section on se trouve.
 	 */
-	scroll_activate_items() {
+	scrollActivateItems() {
 		this.nodesEls['sections'].forEach((sectionEl, index) => {
 			const linkEl = this.nodesEls['links'][index];
 
@@ -245,8 +245,8 @@ class FBQuickNav {
 	 * Click on the trigger button.
 	 * Open and close the quicknav.
 	 */
-	open_close_trigger() {
-		if (this.settings.add_trigger !== true) { return; }
+	triggerEvents() {
+		if (this.settings.addTrigger !== true) { return; }
 
 		const triggerEl = this.quicknavEl.querySelector(".jsQuickNav__trigger");
 		if (!triggerEl) { return; }
@@ -267,8 +267,8 @@ class FBQuickNav {
 	/**
 	 * Close the quicknav on scroll
 	 */
-	close_on_scroll() {
-		if (this.settings.add_trigger !== true) { return; }
+	closeOnScroll() {
+		if (this.settings.addTrigger !== true) { return; }
 
 		window.addEventListener('scroll', _.throttle(() => {
 			if (this.quicknavEl.classList.contains("open")) {
@@ -283,8 +283,8 @@ class FBQuickNav {
 	 * When the window reach a section, hide the quicknav.
 	 * Usually, this section is the footer.
 	 */
-	hide_quicknav() {
-		const hideHereEl = document.querySelector(this.settings.section_class_hide);
+	hideQuickNav() {
+		const hideHereEl = document.querySelector(this.settings.sectionClassHide);
 		if (!hideHereEl) { return; }
 
 
@@ -314,7 +314,7 @@ class FBQuickNav {
 	 * Mettre le nom de la section active dans le trigger button.
 	 */
 	set_trigger_label(index) {
-		if (this.settings.add_trigger !== true) { return; }
+		if (this.settings.addTrigger !== true) { return; }
 
 		// Init the var, so we won't query it each time
 		if (!this.triggerLabelEl) {
@@ -349,7 +349,7 @@ class FBQuickNav {
 	 * Centralise le code qui permet de scroller vers une section.
 	 */
 	go_to_section(sectionEl) {
-		const y = sectionEl.getBoundingClientRect().top + window.pageYOffset + this.settings.scroll_offset;
+		const y = sectionEl.getBoundingClientRect().top + window.pageYOffset + this.settings.scrollOffset;
 		window.scrollTo({ top: y, behavior: 'smooth' });
 	}
 }
