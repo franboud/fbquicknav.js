@@ -25,7 +25,7 @@ For each section that you want in the quick nav:
 The basic styles are in the `style.css` file. Copy those classes in your project for basic styles.
 
 
-## Required
+## Dependencies
 * [GSAP](https://greensock.com/gsap/) with [ScrollTrigger](https://greensock.com/scrolltrigger/)
 * [LoDash](https://lodash.com/) _.throttle
 
