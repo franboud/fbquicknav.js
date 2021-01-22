@@ -6,12 +6,12 @@
  *    - LoDash _.throttle
  *	  - GSAP with ScrollTrigger
  *
- * Pour activer :
+ * To activate:
  *	  new FBQuickNav('.jsQuicknav');
  *    const quickNav = new FBQuickNav('.jsQuicknav');
  *    const quickNav = new FBQuickNav('.jsQuicknav', { options });
  *
- * Options configurables :
+ * Settings:
  *    - sectionClass --> Class name of the sections added in the quick nav.
  *    - sectionTitle --> Data attribute for the title of the section, displayed in the quick nav.
  *    - sectionClassHide --> When the quicknav reaches this section, hide it.
@@ -65,7 +65,7 @@ class FBQuickNav {
 		this.closeOnScroll();
 		this.hideQuickNav();
 
-		// Tout est fait, init quicknav
+		// This init will show the quicknav
 		this.quicknavEl.classList.add("isInit");
 	}
 
@@ -160,7 +160,7 @@ class FBQuickNav {
 			buttonEl.appendChild(buttonLabel);
 			buttonEl.appendChild(buttonIcons);
 
-			// Avant ou apres la liste d'items
+			// Before or after the items list
 			if (this.settings.triggerAfterItems) {
 				quicknavInEl.appendChild(buttonEl);
 			} else {
@@ -178,7 +178,7 @@ class FBQuickNav {
 
 		/**
 		 * DEFAULT LABEL
-		 * On met le nom de la premiere section dans le trigger label.
+		 * We show the first section name in the label.
 		 */
 		this.set_trigger_label(0);
 	}
@@ -200,8 +200,8 @@ class FBQuickNav {
 
 
 	/**
-	 * Gerer l'activation automatique des classes "active" sur les items.
-	 * Quand le user scroll, on indique sur quelle section on se trouve.
+	 * Automatic activation of the "active" class on the items.
+	 * When the user scrolls, the active section is highlighted.
 	 */
 	scrollActivateItems() {
 		this.nodesEls['sections'].forEach((sectionEl, index) => {
@@ -299,7 +299,7 @@ class FBQuickNav {
 			// "bottom 80%" = "when the bottom of the trigger hits 80% down from the top of the viewport" 
 			start: "top 25%",
 
-			// Ce code permet de ne pas avoir de fin au ScrollTrigger
+			// No end ScrollTrigger
 			endTrigger: "html",
 			end: "bottom top",
 
@@ -311,7 +311,7 @@ class FBQuickNav {
 
 	/**
 	 * Update the trigger label
-	 * Mettre le nom de la section active dans le trigger button.
+	 * Set the name of the active section in the trigger button label.
 	 */
 	set_trigger_label(index) {
 		if (this.settings.addTrigger !== true) { return; }
@@ -345,8 +345,7 @@ class FBQuickNav {
 
 
 	/**
-	 * Scroll to section
-	 * Centralise le code qui permet de scroller vers une section.
+	 * Scroll to a specific section
 	 */
 	go_to_section(sectionEl) {
 		const y = sectionEl.getBoundingClientRect().top + window.pageYOffset + this.settings.scrollOffset;
