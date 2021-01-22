@@ -28,6 +28,7 @@ The basic styles are in the `style.css` file. Copy those classes in your project
 ## Dependencies
 * [GSAP](https://greensock.com/gsap/) with [ScrollTrigger](https://greensock.com/scrolltrigger/)
 * [LoDash](https://lodash.com/) _.throttle
+* Smooth Scroll polyfill (for Safari)
 
 
 ## Options
