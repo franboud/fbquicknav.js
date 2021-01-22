@@ -1,19 +1,32 @@
+/*  GENERIC STYLES
+	Styles for the demonstration page. */
+	body {font-family: Helvetica Neue,Helvetica,Arial,sans-serif; line-height: 1.45; margin: 0;padding: 4em 10% 0 10%;}
+	h1 {margin:2em 0;}
+	section {padding-bottom: 6em;}
+	footer {border-top: 1px solid #ccc; padding-bottom: 3em;}
+
+	.svgIcon {display:block;font-size: 1em;line-height: 1;width: 1em;height: 1em;}
+	.svgIcon > svg {max-width: none; display: block; fill: currentColor; width: 1em; height: 1em;}
+	
+
+
 /*  QUICKNAV
     Quick nav sticky at right of some pages. */
-    .quickNav {display: block;background: red;position: fixed;top: 0;right: 0;box-sizing: border-box;width: 100vh;height: 6vw;z-index: 5;transform: rotate(-90deg) translateY(-100%);transform-origin: 100% 0%; opacity: 0;transition: opacity 0.5s;}
-    .quickNav__in {width: 100%;background-color: transparent;transition: background 0.4s;}
-    .quickNav__items {display: flex;height: 100%;align-items: center;}
-    .quickNav__item {display: block;color: #000;text-decoration: none;text-transform: uppercase;flex: 1 1 auto;white-space: nowrap;text-align: center;padding: 1vw 0;}
-    .quickNav__text { }
+	* {box-sizing: border-box;}
+    .quickNav {--quicknav-height:4em; display: block;background: lightblue;position: fixed;z-index: 5;top: 0;height: var(--quicknav-height);left: 0;right: 0;opacity: 0; transition: opacity 0.5s, transform 0.5s;}
+    .quickNav__in {height: 100%; }
+    .quickNav__items {display: flex;height: 100%;}
+    .quickNav__item {flex: 1 1 auto;display: flex;align-items: center;justify-content: center;color: #000;text-decoration: none;text-transform: uppercase;font-weight: bold;text-align: center;}
+    .quickNav__text {display: block;flex: 0 1 auto;}
 
-    .quickNav__trigger {position: relative;cursor: pointer;background: none;display: flex;align-items: center;text-align: center;width: 100%;max-width: 100%;padding: 1.4em 0;margin: 0;border: none;color: #147b8c;text-transform: uppercase;outline: none;font-size: 1em;line-height: 1.2;font-weight: normal;text-decoration: none;box-sizing: border-box;border-radius: 0;-webkit-appearance: none;-moz-appearance: none;appearance: none;display: none;}
-	.quickNav__triggerLabel {display:block;flex: 1 1 auto; }
-	.quickNav__triggerIcon {display: block;position: absolute;right: 0;top: 50%;transform: translateY(-50%);color: red;}
+    .quickNav__trigger {appearance: none; position: relative;cursor: pointer;background: none;outline: none;border: none;border-radius: 0;padding: 0;margin: 0;display: flex;align-items: center;text-align: center;width: 100%;max-width: 100%;height: var(--quicknav-height);color: blue;font-size: 1em;line-height: 1.2;font-weight: bold;text-decoration: none;text-transform: uppercase; display: none;}
+	.quickNav__triggerLabel {display:block;flex: 1 1 auto;padding: 0 3em;}
+	.quickNav__triggerIcon {display: block;position: absolute;right: 1em;top: 50%;transform: translateY(-50%);color: blue;}
 	.quickNav__triggerOpen {display: block; }
 	.quickNav__triggerClose {display: none; }
 
         /* Init */
-        .quickNav.isInit {opacity: 1;}
+        .quickNav.isInit {opacity: 1; }
 
         /* Hover */
         .quickNav__item:hover {color: blue;}
@@ -22,20 +35,15 @@
         .quickNav__item.active {color: blue;}
 
         /* Hide */
-        .quickNav.quickNav--hide {opacity: 0;}
+        .quickNav.quickNav--hide {transform: translateY(-101%); }
 
 
-    /* Hidden on small screens */
-    @media (max-width:991px) {
-        .quickNav {display: none;}
-    }
-
-	/* Quicknav devient dropdown. */
+	/* Quicknav becomes a dropdown */
 	@media (max-width:991px) {
 		.quickNav { }
-		.quickNav__in {padding: 0;background: #fff;}
-		.quickNav__items {display: none;height: auto;padding-bottom: 1em;}
-		.quickNav__item {padding: 1em 0;margin: 0;}
+		.quickNav__in { }
+		.quickNav__items {display: none;height: auto;background: lightblue;}
+		.quickNav__item {padding: 1em 0;}
 		.quickNav__text { }
 
 		.quickNav__trigger {display: flex;}
