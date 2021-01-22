@@ -8,7 +8,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 /**
  * Quick Nav plugin.
- * Version 2.2
+ * Version 2.3
  *
  * Required:
  *    - LoDash _.throttle
