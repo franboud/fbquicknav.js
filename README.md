@@ -5,9 +5,9 @@ This vanilla JS plugin creates a quick nav to navigate the sections of a web pag
 ## How to use
 ### JS
 ```javascript
-new FBQuickNav('.jsQuicknav');
-const quickNav = new FBQuickNav('.jsQuicknav');
-const quickNav = new FBQuickNav('.jsQuicknav', { options });
+new FBQuickNav('.jsQuickNav');
+const quickNav = new FBQuickNav('.jsQuickNav');
+const quickNav = new FBQuickNav('.jsQuickNav', { options });
 ```
 
 ### HTML
@@ -32,7 +32,7 @@ The basic styles are in the `style.css` file. Copy those classes in your project
 Configurable options for the plugin. The default values are shown.
 
 ```js
-new FBQuickNav('.jsQuicknav', {
+new FBQuickNav('.jsQuickNav', {
     
     // Class name of the sections added in the quick nav.
     // Value: CSS selector
