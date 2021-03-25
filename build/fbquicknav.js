@@ -8,14 +8,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 /**
  * Quick Nav plugin.
- * Version 2.3
+ * Version 2.3.1
  *
  * Required:
  *    - LoDash _.throttle
- *	  - GSAP with ScrollTrigger
+ *    - GSAP with ScrollTrigger
  *
  * To activate:
- *	  new FBQuickNav('.jsQuicknav');
+ *    new FBQuickNav('.jsQuicknav');
  *    const quickNav = new FBQuickNav('.jsQuicknav');
  *    const quickNav = new FBQuickNav('.jsQuicknav', { options });
  *
@@ -35,15 +35,15 @@ var FBQuickNav = /*#__PURE__*/function () {
 
     this.quicknavEl = document.querySelector(selector); // Try to init
 
-    if (this.quicknavEl == null || typeof this.quicknavEl === "undefined") {
+    if (this.quicknavEl == null || typeof this.quicknavEl === 'undefined') {
       return;
     } // Default settings
 
 
     this.settings = {
-      sectionClass: ".jsQuickNav__section",
-      sectionTitle: "data-quicknav-title",
-      sectionClassHide: ".jsQuickNav__hide",
+      sectionClass: '.jsQuickNav__section',
+      sectionTitle: 'data-quicknav-title',
+      section_ClassHide: '.jsQuickNav__hide',
       scrollOffset: -100,
       addTrigger: false,
       triggerAfterItems: false,
@@ -54,9 +54,9 @@ var FBQuickNav = /*#__PURE__*/function () {
     this.settings = Object.assign(this.settings, options); // Cache HTML nodes, for fast and easy access
 
     this.nodesEls = [];
-    this.nodesEls['sections'] = [];
-    this.nodesEls['links'] = [];
-    this.nodesEls['titles'] = []; // Init this plugin
+    this.nodesEls.sections = [];
+    this.nodesEls.links = [];
+    this.nodesEls.titles = []; // Init this plugin
 
     this.init();
   }
@@ -72,7 +72,7 @@ var FBQuickNav = /*#__PURE__*/function () {
       this.closeOnScroll();
       this.hideQuickNav(); // This init will show the quicknav
 
-      this.quicknavEl.classList.add("isInit");
+      this.quicknavEl.classList.add('isInit');
     }
     /**
      * Get the sections that we will use for the quick nav.
@@ -84,13 +84,13 @@ var FBQuickNav = /*#__PURE__*/function () {
     value: function getSections() {
       var _this = this;
 
-      var sectionsEl = document.querySelectorAll(this.settings.sectionClass + '[' + this.settings.sectionTitle + ']');
+      var sectionsEl = document.querySelectorAll("".concat(this.settings.sectionClass, "[").concat(this.settings.sectionTitle, "]"));
       sectionsEl.forEach(function (sectionEl, index) {
         // Set section in a var for quick access by index later on.
-        _this.nodesEls['sections'][index] = sectionEl; // Set title in a var for quick access by index later on.
+        _this.nodesEls.sections[index] = sectionEl; // Set title in a var for quick access by index later on.
 
-        var sectionTitle = sectionEl.getAttribute("data-quicknav-title");
-        _this.nodesEls['titles'][index] = sectionTitle;
+        var sectionTitle = sectionEl.getAttribute('data-quicknav-title');
+        _this.nodesEls.titles[index] = sectionTitle;
       });
     }
     /**
@@ -106,27 +106,27 @@ var FBQuickNav = /*#__PURE__*/function () {
        * WRAP
        * Wrap everything in a __in div.
        */
-      var quicknavInEl = document.createElement("div");
-      quicknavInEl.classList.add("quickNav__in");
+      var quicknavInEl = document.createElement('div');
+      quicknavInEl.classList.add('quickNav__in');
       /**
        * ADD ITEMS
        * Add all the items in the quicknav.
        */
 
-      var itemsEl = document.createElement("div");
+      var itemsEl = document.createElement('div');
       itemsEl.classList.add('quickNav__items', 'jsQuickNav__ctn');
-      this.nodesEls['sections'].forEach(function (sectionEl, index) {
+      this.nodesEls.sections.forEach(function (sectionEl, index) {
         var title = sectionEl.getAttribute(_this2.settings.sectionTitle); // <a>
 
-        var itemEl = document.createElement("a");
-        itemEl.classList.add("quickNav__item");
-        itemEl.href = "#"; // <span> inside of the <a>
+        var itemEl = document.createElement('a');
+        itemEl.classList.add('quickNav__item');
+        itemEl.href = '#'; // <span> inside of the <a>
 
-        var spanEl = document.createElement("span");
-        spanEl.classList.add("quickNav__text");
+        var spanEl = document.createElement('span');
+        spanEl.classList.add('quickNav__text');
         spanEl.textContent = title; // Set in this var for quick access by index later on.
 
-        _this2.nodesEls['links'][index] = itemEl; // Add to the items DOM
+        _this2.nodesEls.links[index] = itemEl; // Add to the items DOM
 
         itemEl.appendChild(spanEl);
         itemsEl.appendChild(itemEl);
@@ -138,18 +138,18 @@ var FBQuickNav = /*#__PURE__*/function () {
        */
 
       if (this.settings.addTrigger === true) {
-        var buttonEl = document.createElement("button");
-        buttonEl.type = "button";
-        buttonEl.classList.add("quickNav__trigger", "jsQuickNav__trigger");
-        var buttonLabel = document.createElement("span");
-        buttonLabel.classList.add("quickNav__triggerLabel", "jsQuickNav__triggerLabel");
-        var buttonIcons = document.createElement("span");
-        buttonIcons.classList.add("quickNav__triggerIcon");
-        var buttonIconOpen = document.createElement("span");
-        buttonIconOpen.classList.add("svgIcon", "quickNav__triggerOpen");
+        var buttonEl = document.createElement('button');
+        buttonEl.type = 'button';
+        buttonEl.classList.add('quickNav__trigger', 'jsQuickNav__trigger');
+        var buttonLabel = document.createElement('span');
+        buttonLabel.classList.add('quickNav__triggerLabel', 'jsQuickNav__triggerLabel');
+        var buttonIcons = document.createElement('span');
+        buttonIcons.classList.add('quickNav__triggerIcon');
+        var buttonIconOpen = document.createElement('span');
+        buttonIconOpen.classList.add('svgIcon', 'quickNav__triggerOpen');
         buttonIconOpen.innerHTML = this.settings.triggerIconOpen;
-        var buttonIconClose = document.createElement("span");
-        buttonIconClose.classList.add("svgIcon", "quickNav__triggerClose");
+        var buttonIconClose = document.createElement('span');
+        buttonIconClose.classList.add('svgIcon', 'quickNav__triggerClose');
         buttonIconClose.innerHTML = this.settings.triggerIconClose;
         buttonIcons.appendChild(buttonIconOpen);
         buttonIcons.appendChild(buttonIconClose);
@@ -174,7 +174,7 @@ var FBQuickNav = /*#__PURE__*/function () {
        * We show the first section name in the label.
        */
 
-      this.set_trigger_label(0);
+      this.setTriggerLabel(0);
     }
     /**
      * Click on the quicknav link.
@@ -186,11 +186,11 @@ var FBQuickNav = /*#__PURE__*/function () {
     value: function clickItemsEvents() {
       var _this3 = this;
 
-      this.nodesEls['links'].forEach(function (linkEl, index) {
-        linkEl.addEventListener("click", function (evt) {
+      this.nodesEls.links.forEach(function (linkEl, index) {
+        linkEl.addEventListener('click', function (evt) {
           evt.preventDefault();
 
-          _this3.go_to_section(_this3.nodesEls['sections'][index]);
+          _this3.goToSection(_this3.nodesEls.sections[index]);
         });
       });
     }
@@ -204,33 +204,33 @@ var FBQuickNav = /*#__PURE__*/function () {
     value: function scrollActivateItems() {
       var _this4 = this;
 
-      this.nodesEls['sections'].forEach(function (sectionEl, index) {
-        var linkEl = _this4.nodesEls['links'][index];
+      this.nodesEls.sections.forEach(function (sectionEl, index) {
+        var linkEl = _this4.nodesEls.links[index];
         ScrollTrigger.create({
           trigger: sectionEl,
-          // Describes a place on the trigger and a place on the scroller 
+          // Describes a place on the trigger and a place on the scroller
           // that must meet in order to start the ScrollTrigger.
           // Example:
-          // "top center" = "when the top of the trigger hits the center of the scroller"
-          // "bottom 80%" = "when the bottom of the trigger hits 80% down from the top of the viewport" 
-          start: "top center",
-          end: "bottom center",
+          // "top center" = "when the top of trigger hits the center of the scroller"
+          // "bottom 80%" = "when the bottom of trigger hits 80% down from the top of the viewport"
+          start: 'top center',
+          end: 'bottom center',
           // Gestion custom des events
           onEnter: function onEnter() {
-            linkEl.classList.add("active");
+            linkEl.classList.add('active');
 
-            _this4.set_trigger_label(index);
+            _this4.setTriggerLabel(index);
           },
           onLeave: function onLeave() {
-            linkEl.classList.remove("active");
+            linkEl.classList.remove('active');
           },
           onEnterBack: function onEnterBack() {
-            linkEl.classList.add("active");
+            linkEl.classList.add('active');
 
-            _this4.set_trigger_label(index);
+            _this4.setTriggerLabel(index);
           },
           onLeaveBack: function onLeaveBack() {
-            linkEl.classList.remove("active");
+            linkEl.classList.remove('active');
           } // markers: true,
           // id: "section " + sectionIndex,
 
@@ -251,19 +251,19 @@ var FBQuickNav = /*#__PURE__*/function () {
         return;
       }
 
-      var triggerEl = this.quicknavEl.querySelector(".jsQuickNav__trigger");
+      var triggerEl = this.quicknavEl.querySelector('.jsQuickNav__trigger');
 
       if (!triggerEl) {
         return;
       }
 
-      triggerEl.addEventListener("click", function (evt) {
+      triggerEl.addEventListener('click', function (evt) {
         evt.preventDefault();
 
-        if (_this5.quicknavEl.classList.contains("open")) {
-          _this5.close_quicknav();
+        if (_this5.quicknavEl.classList.contains('open')) {
+          _this5.closeQuicknav();
         } else {
-          _this5.open_quicknav();
+          _this5.openQuicknav();
         }
       });
     }
@@ -281,8 +281,8 @@ var FBQuickNav = /*#__PURE__*/function () {
       }
 
       window.addEventListener('scroll', _.throttle(function () {
-        if (_this6.quicknavEl.classList.contains("open")) {
-          _this6.close_quicknav();
+        if (_this6.quicknavEl.classList.contains('open')) {
+          _this6.closeQuicknav();
         }
       }, 300));
     }
@@ -305,17 +305,17 @@ var FBQuickNav = /*#__PURE__*/function () {
         trigger: hideHereEl,
         toggleClass: {
           targets: this.quicknavEl,
-          className: "quickNav--hide"
+          className: 'quickNav--hide'
         },
-        // Describes a place on the trigger and a place on the scroller 
+        // Describes a place on the trigger and a place on the scroller
         // that must meet in order to start the ScrollTrigger.
         // Example:
         // "top center" = "when the top of the trigger hits the center of the scroller"
-        // "bottom 80%" = "when the bottom of the trigger hits 80% down from the top of the viewport" 
-        start: "top 25%",
+        // "bottom 80%" = "when the bottom of the trigger hits 80% down from the top of the viewport"
+        start: 'top 25%',
         // No end ScrollTrigger
-        endTrigger: "html",
-        end: "bottom top" // markers: true,
+        endTrigger: 'html',
+        end: 'bottom top' // markers: true,
         // id: "hide quicknav",
 
       });
@@ -326,20 +326,20 @@ var FBQuickNav = /*#__PURE__*/function () {
      */
 
   }, {
-    key: "set_trigger_label",
-    value: function set_trigger_label(index) {
+    key: "setTriggerLabel",
+    value: function setTriggerLabel(index) {
       if (this.settings.addTrigger !== true) {
         return;
       } // Init the var, so we won't query it each time
 
 
       if (!this.triggerLabelEl) {
-        this.triggerLabelEl = this.quicknavEl.querySelector(".jsQuickNav__triggerLabel");
+        this.triggerLabelEl = this.quicknavEl.querySelector('.jsQuickNav__triggerLabel');
       } // If the node exists, update it.
 
 
       if (this.triggerLabelEl) {
-        this.triggerLabelEl.textContent = this.nodesEls['titles'][index];
+        this.triggerLabelEl.textContent = this.nodesEls.titles[index];
       }
     }
     /**
@@ -347,8 +347,8 @@ var FBQuickNav = /*#__PURE__*/function () {
      */
 
   }, {
-    key: "open_quicknav",
-    value: function open_quicknav() {
+    key: "openQuicknav",
+    value: function openQuicknav() {
       this.quicknavEl.classList.add('open');
     }
     /**
@@ -356,8 +356,8 @@ var FBQuickNav = /*#__PURE__*/function () {
      */
 
   }, {
-    key: "close_quicknav",
-    value: function close_quicknav() {
+    key: "closeQuicknav",
+    value: function closeQuicknav() {
       this.quicknavEl.classList.remove('open');
     }
     /**
@@ -365,8 +365,8 @@ var FBQuickNav = /*#__PURE__*/function () {
      */
 
   }, {
-    key: "go_to_section",
-    value: function go_to_section(sectionEl) {
+    key: "goToSection",
+    value: function goToSection(sectionEl) {
       var y = sectionEl.getBoundingClientRect().top + window.pageYOffset + this.settings.scrollOffset;
       window.scrollTo({
         top: y,
