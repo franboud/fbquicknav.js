@@ -1,6 +1,6 @@
 /**
  * Quick Nav plugin.
- * Version 2.3
+ * Version 2.3.1
  *
  * Required:
  *    - LoDash _.throttle
