@@ -1,6 +1,6 @@
 /**
  * Quick Nav plugin.
- * Version 2.3.1
+ * Version 2.4
  *
  * Required:
  *    - LoDash _.throttle
@@ -90,6 +90,14 @@ class FBQuickNav {
    * Creates the HTML and add it to the DOM.
    */
   buildHTML() {
+    /**
+     * CHECK
+     * If the HTML is hard-coded, don't create it again.
+     */
+    if (this.quicknavEl.innerHTML !== '') {
+      return;
+    }
+
     /**
      * WRAP
      * Wrap everything in a __in div.
