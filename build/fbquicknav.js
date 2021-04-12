@@ -8,7 +8,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 /**
  * Quick Nav plugin.
- * Version 2.3.1
+ * Version 2.4
  *
  * Required:
  *    - LoDash _.throttle
@@ -103,9 +103,18 @@ var FBQuickNav = /*#__PURE__*/function () {
       var _this2 = this;
 
       /**
+       * CHECK
+       * If the HTML is hard-coded, don't create it again.
+       */
+      if (this.quicknavEl.innerHTML !== '') {
+        return;
+      }
+      /**
        * WRAP
        * Wrap everything in a __in div.
        */
+
+
       var quicknavInEl = document.createElement('div');
       quicknavInEl.classList.add('quickNav__in');
       /**
