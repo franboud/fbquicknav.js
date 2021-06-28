@@ -35,7 +35,7 @@ class FBQuickNav {
     this.settings = {
       sectionClass: '.jsQuickNav__section',
       sectionTitle: 'data-quicknav-title',
-      section_ClassHide: '.jsQuickNav__hide',
+      sectionClassHide: '.jsQuickNav__hide',
       scrollOffset: -100,
       addTrigger: false,
       triggerAfterItems: false,
