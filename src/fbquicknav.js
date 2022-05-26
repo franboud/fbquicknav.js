@@ -2,6 +2,10 @@
  * Quick Nav plugin.
  * Version 2.4
  *
+ * TODO:
+ *    - Avoir un seul identifiant pour les sections de quickNav,
+ *      ne pas avoir __section ainsi qu'un attribut "data-title-"
+ *
  * Required:
  *    - LoDash _.throttle
  *    - GSAP with ScrollTrigger
